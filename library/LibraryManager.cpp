@@ -1,5 +1,7 @@
 #include "LibraryManager.h"
+#include <iomanip>
 #include <iostream>
+
 
 using namespace std;
 
@@ -96,9 +98,16 @@ void showAllSongs() {
   }
   SongNode *curr = libHead;
   cout << "=== Daftar Lagu Library ===" << endl;
+  cout << left << setw(5) << "ID" << left << setw(35) << "Judul" << left
+       << setw(25) << "Artis" << left << setw(15) << "Genre" << left << setw(6)
+       << "Tahun" << endl;
+  cout << string(86, '-') << endl;
+
   while (curr != nullptr) {
-    cout << "ID: " << curr->data.id << " | " << curr->data.title << " - "
-         << curr->data.artist << " (" << curr->data.year << ")" << endl;
+    cout << left << setw(5) << curr->data.id << left << setw(35)
+         << curr->data.title << left << setw(25) << curr->data.artist << left
+         << setw(15) << curr->data.genre << left << setw(6) << curr->data.year
+         << endl;
     curr = curr->next;
   }
 }
