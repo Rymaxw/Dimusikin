@@ -12,17 +12,24 @@ void showAdminMenu() {
     cout << "=== MENU ADMIN ===" << endl;
     cout << "1. Tambah Lagu" << endl;
     cout << "2. Edit Lagu" << endl;
-    cout << "3. Edit ID Lagu" << endl; // New
+    cout << "3. Edit ID Lagu" << endl;
     cout << "4. Hapus Lagu" << endl;
     cout << "5. Lihat Semua Lagu" << endl;
     cout << "0. Kembali" << endl;
     cout << "Pilihan: ";
     cin >> choice;
 
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore(1000, '\n');
+      cout << "Input tidak valid. Keluar dari menu." << endl;
+      break;
+    }
+
     if (choice == 1) {
       Song s;
-      cout << "ID: ";
-      cin >> s.id;
+      s.id = generateNewId(); // Auto-increment
+      cout << "ID: " << s.id << endl;
       cin.ignore();
       cout << "Judul: ";
       getline(cin, s.title);
@@ -32,11 +39,15 @@ void showAdminMenu() {
       getline(cin, s.genre);
       cout << "Tahun: ";
       cin >> s.year;
+      cout << "Durasi (MM:SS): ";
+      cin >> s.duration;
       addSong(s);
       pauseScreen();
     } else if (choice == 2) { // Edit
+      clearScreen();          // New: Clear screen
+      showAllSongs();         // New: Show table for reference
       int id;
-      cout << "Masukkan ID Lagu yang akan diedit: ";
+      cout << "\nMasukkan ID Lagu yang akan diedit: ";
       cin >> id;
       SongNode *s = getSongById(id);
       if (s) {
@@ -59,18 +70,22 @@ void showAdminMenu() {
           newDetails.genre = input;
 
         cout << "Tahun Baru (" << s->data.year << "): ";
-        // Handling int input for year is tricky with mixed cin/getline if empty
-        // Simple way: just ask to re-enter or 0 to keep
         int newYear;
         cin >> newYear;
         if (newYear != 0)
           newDetails.year = newYear;
 
+        cout << "Durasi Baru (" << s->data.duration
+             << ") [ketik '-' untuk skip]: ";
+        string newDuration;
+        cin >> newDuration;
+        if (newDuration != "-")
+          newDetails.duration = newDuration;
+
         editSong(id, newDetails);
       } else {
         cout << "Lagu tidak ditemukan." << endl;
       }
-      pauseScreen();
       pauseScreen();
     } else if (choice == 3) { // Edit ID
       int oldId, newId;
@@ -87,7 +102,7 @@ void showAdminMenu() {
       deleteSong(id);
       pauseScreen();
     } else if (choice == 5) {
-      clearScreen(); // New
+      clearScreen();
       showAllSongs();
       pauseScreen();
     }

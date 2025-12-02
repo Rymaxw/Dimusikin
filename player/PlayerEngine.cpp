@@ -151,24 +151,29 @@ void nextSong() {
   }
 
   // 2. Logic based on Mode
-  if (playMode == 0) { // Library Mode -> Graph Recommendation
+  if (playMode == 0) { // Library Mode -> Genre Sequence
     if (currentSong == nullptr) {
       cout << "Tidak ada lagu yang sedang diputar." << endl;
       return;
     }
-    // Simple logic: Pick the first recommendation
-    GraphVertexNode *vertex = findVertex(currentSong->data.id);
-    if (vertex != nullptr && vertex->head != nullptr) {
-      playSong(vertex->head->song);
-      cout << "(Auto-play dari Rekomendasi Graph)" << endl;
-    } else {
-      // Fallback: Next in Library DLL
-      if (currentSong->next != nullptr) {
-        playSong(currentSong->next);
-        cout << "(Auto-play dari Library Next)" << endl;
-      } else {
-        cout << "Akhir dari Library." << endl;
+
+    // Genre Sequence Logic: Find next song with SAME genre
+    string currentGenre = currentSong->data.genre;
+    SongNode *curr = currentSong->next;
+    bool found = false;
+
+    while (curr != nullptr) {
+      if (curr->data.genre == currentGenre) {
+        playSong(curr);
+        cout << "(Auto-play: Genre " << currentGenre << ")" << endl;
+        found = true;
+        break;
       }
+      curr = curr->next;
+    }
+
+    if (!found) {
+      cout << "Akhir dari genre '" << currentGenre << "'." << endl;
     }
   } else { // Playlist Mode
     if (currentPlaylistNode != nullptr &&

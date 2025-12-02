@@ -33,7 +33,7 @@ void showUserMenu() {
     cout << "3. Next Song" << endl;
     cout << "4. Prev Song" << endl;
     cout << "5. Cari Lagu" << endl;
-    cout << "6. Lihat Library & Mainkan (Mode: Graph Navigation)" << endl;
+    cout << "6. Lihat Library & Mainkan (Mode: Genre Sequence)" << endl;
     cout << "7. Mainkan dari Playlist (Mode: Sequential)" << endl;
     cout << "8. Lihat Playlist Saya" << endl;
     cout << "9. Kelola Playlist" << endl;
@@ -42,6 +42,13 @@ void showUserMenu() {
 
     cout << "\nPilihan: ";
     cin >> choice;
+
+    if (cin.fail()) {
+      cin.clear();
+      cin.ignore(1000, '\n');
+      cout << "Input tidak valid. Keluar dari menu." << endl;
+      break;
+    }
 
     switch (choice) {
     case 1: { // Putar Lagu (ID or Title)
@@ -134,7 +141,7 @@ void showUserMenu() {
       if (id != 0) {
         SongNode *s = getSongById(id);
         if (s) {
-          setPlayMode(0); // Graph/Library Mode
+          setPlayMode(0); // Genre Sequence Mode
           playSong(s);
         } else {
           cout << "Lagu tidak ditemukan." << endl;

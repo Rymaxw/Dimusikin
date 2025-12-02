@@ -10,7 +10,8 @@ void editSongId(int oldId, int newId); // New // New
 void deleteSong(int id);
 void showAllSongs();
 SongNode *getSongById(int id);
-SongNode *getSongByTitle(string title); // New
+SongNode *getSongByTitle(string title);
+int generateNewId(); // New
 SongNode *getHead(); // Helper to access the list from outside if needed
 
 #endif

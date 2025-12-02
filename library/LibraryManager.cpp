@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <iostream>
 
-
 using namespace std;
 
 SongNode *libHead = nullptr;
@@ -45,6 +44,7 @@ void editSong(int id, Song newDetails) {
   s->data.artist = newDetails.artist;
   s->data.genre = newDetails.genre;
   s->data.year = newDetails.year;
+  s->data.duration = newDetails.duration; // Update duration
   cout << "Lagu berhasil diupdate." << endl;
 }
 
@@ -100,14 +100,14 @@ void showAllSongs() {
   cout << "=== Daftar Lagu Library ===" << endl;
   cout << left << setw(5) << "ID" << left << setw(35) << "Judul" << left
        << setw(25) << "Artis" << left << setw(15) << "Genre" << left << setw(6)
-       << "Tahun" << endl;
-  cout << string(86, '-') << endl;
+       << "Tahun" << left << setw(10) << "Durasi" << endl;
+  cout << string(96, '-') << endl;
 
   while (curr != nullptr) {
     cout << left << setw(5) << curr->data.id << left << setw(35)
          << curr->data.title << left << setw(25) << curr->data.artist << left
          << setw(15) << curr->data.genre << left << setw(6) << curr->data.year
-         << endl;
+         << left << setw(10) << curr->data.duration << endl;
     curr = curr->next;
   }
 }
@@ -132,6 +132,21 @@ SongNode *getSongByTitle(string title) {
     curr = curr->next;
   }
   return nullptr;
+}
+
+int generateNewId() {
+  if (libHead == nullptr) {
+    return 1;
+  }
+  int maxId = 0;
+  SongNode *curr = libHead;
+  while (curr != nullptr) {
+    if (curr->data.id > maxId) {
+      maxId = curr->data.id;
+    }
+    curr = curr->next;
+  }
+  return maxId + 1;
 }
 
 SongNode *getHead() { return libHead; }

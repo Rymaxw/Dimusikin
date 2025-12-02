@@ -134,8 +134,8 @@ void showPlaylistDetails(string playlistName) {
   // Table Header
   cout << left << setw(5) << "No" << left << setw(35) << "Judul" << left
        << setw(25) << "Artis" << left << setw(15) << "Genre" << left << setw(6)
-       << "Tahun" << endl;
-  cout << string(86, '-') << endl;
+       << "Tahun" << left << setw(10) << "Durasi" << endl;
+  cout << string(96, '-') << endl;
 
   PlaylistItemNode *curr = pl->head;
   int i = 1;
@@ -144,7 +144,7 @@ void showPlaylistDetails(string playlistName) {
     cout << left << setw(5) << i << left << setw(35) << curr->song->data.title
          << left << setw(25) << curr->song->data.artist << left << setw(15)
          << curr->song->data.genre << left << setw(6) << curr->song->data.year
-         << endl;
+         << left << setw(10) << curr->song->data.duration << endl;
     curr = curr->next;
     i++;
   }
