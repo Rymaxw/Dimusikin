@@ -12,9 +12,8 @@ void showAdminMenu() {
     cout << "=== MENU ADMIN ===" << endl;
     cout << "1. Tambah Lagu" << endl;
     cout << "2. Edit Lagu" << endl;
-    cout << "3. Edit ID Lagu" << endl;
-    cout << "4. Hapus Lagu" << endl;
-    cout << "5. Lihat Semua Lagu" << endl;
+    cout << "3. Hapus Lagu" << endl;
+    cout << "4. Lihat Semua Lagu" << endl;
     cout << "0. Kembali" << endl;
     cout << "Pilihan: ";
     cin >> choice;
@@ -87,21 +86,16 @@ void showAdminMenu() {
         cout << "Lagu tidak ditemukan." << endl;
       }
       pauseScreen();
-    } else if (choice == 3) { // Edit ID
-      int oldId, newId;
-      cout << "Masukkan ID Lagu Lama: ";
-      cin >> oldId;
-      cout << "Masukkan ID Lagu Baru: ";
-      cin >> newId;
-      editSongId(oldId, newId);
       pauseScreen();
-    } else if (choice == 4) {
+    } else if (choice == 3) {
+      clearScreen();
+      showAllSongs();
       int id;
-      cout << "Masukkan ID Lagu yang akan dihapus: ";
+      cout << "\nMasukkan ID Lagu yang akan dihapus: ";
       cin >> id;
       deleteSong(id);
       pauseScreen();
-    } else if (choice == 5) {
+    } else if (choice == 4) {
       clearScreen();
       showAllSongs();
       pauseScreen();

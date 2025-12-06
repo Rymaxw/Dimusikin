@@ -160,3 +160,5 @@ PlaylistNode *getPlaylistByName(string name) {
   }
   return nullptr;
 }
+
+PlaylistNode *getPlaylistHead() { return plHead; }

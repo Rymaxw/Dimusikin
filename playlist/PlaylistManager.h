@@ -11,5 +11,6 @@ void addSongToPlaylist(string playlistName, SongNode *song);
 void showAllPlaylists();
 void showPlaylistDetails(string playlistName);
 PlaylistNode *getPlaylistByName(string name);
+PlaylistNode *getPlaylistHead(); // New
 
 #endif

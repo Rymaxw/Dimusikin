@@ -2,9 +2,9 @@
 #include "library/LibraryManager.h"
 #include "player/PlayerEngine.h"
 #include "playlist/PlaylistManager.h"
+#include "utils/JsonHelper.h" // New
 #include "utils/Utils.h"
 #include <iostream>
-
 
 // Forward declarations for menus
 void showAdminMenu();
@@ -48,7 +48,12 @@ void loadDummyData() {
 
 int main() {
   initAll();
-  loadDummyData();
+  // loadDummyData(); // Removed in favor of JSON
+  loadSongsFromJson("songs.json");
+  loadPlaylistsFromJson("playlists.json");
+
+  // If library is empty after load, maybe load dummy?
+  // For now, let's stick to persistence. If empty, user adds manually.
 
   int choice;
   do {
@@ -68,6 +73,10 @@ int main() {
       showUserMenu();
     }
   } while (choice != 0);
+
+  // Save on exit
+  saveSongsToJson("songs.json", getHead());
+  savePlaylistsToJson("playlists.json", getPlaylistHead());
 
   return 0;
 }
