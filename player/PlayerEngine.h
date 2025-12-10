@@ -11,8 +11,8 @@ void nextSong();
 void prevSong();
 void addToQueue(SongNode *song);
 void showQueue();
-void showHistory();         // New
-SongNode *getCurrentSong(); // New
+void showHistory();
+SongNode *getCurrentSong();
 void setPlayMode(int mode); // 0: Library/Graph, 1: Playlist
 void setCurrentPlaylist(std::string playlistName);
 

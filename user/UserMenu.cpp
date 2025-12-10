@@ -7,7 +7,6 @@
 
 using namespace std;
 
-// Forward declaration for submenu
 void showPlaylistMenu();
 
 void showUserMenu() {
@@ -18,27 +17,26 @@ void showUserMenu() {
     cout << "           MENU UTAMA USER             " << endl;
     cout << "=======================================" << endl;
 
-    // 1. Now Playing Display
     SongNode *current = getCurrentSong();
     if (current != nullptr) {
       cout << "\n>>> SEDANG DIPUTAR: " << current->data.title << " - "
            << current->data.artist << " <<<\n"
            << endl;
+
     } else {
       cout << "\n(Tidak ada lagu yang sedang diputar)\n" << endl;
     }
 
     cout << "1. Putar Lagu" << endl;
-    cout << "2. Stop Lagu (Hentikan yang sedang diputar)" << endl;
+    cout << "2. Stop Lagu" << endl;
     cout << "3. Next Song" << endl;
     cout << "4. Prev Song" << endl;
     cout << "5. Cari Lagu" << endl;
-    cout << "6. Lihat Library & Mainkan (Mode: Genre Sequence)" << endl;
-    cout << "7. Mainkan dari Playlist (Mode: Sequential)" << endl;
-    cout << "8. Lihat Playlist Saya" << endl;
-    cout << "9. Kelola Playlist" << endl;
-    cout << "10. Riwayat Putar" << endl;
-    cout << "11. Logout" << endl;
+    cout << "6. Mainkan dari Playlist" << endl;
+    cout << "7. Lihat Playlist Saya" << endl;
+    cout << "8. Kelola Playlist" << endl;
+    cout << "9. Riwayat Putar" << endl;
+    cout << "10. Logout" << endl;
 
     cout << "\nPilihan: ";
     cin >> choice;
@@ -51,13 +49,20 @@ void showUserMenu() {
     }
 
     switch (choice) {
-    case 1: { // Putar Lagu (ID or Title)
+    case 1: {
+      clearScreen();
+      cout << "=== MENU PUTAR LAGU ===" << endl;
       int subChoice;
-      cout << "\nMetode Input:" << endl;
+      cout << "Metode Input:" << endl;
       cout << "1. Berdasarkan ID" << endl;
       cout << "2. Berdasarkan Judul" << endl;
+      cout << "0. Kembali ke Menu Utama" << endl;
       cout << "Pilihan: ";
       cin >> subChoice;
+
+      if (subChoice == 0) {
+        break;
+      }
 
       SongNode *s = nullptr;
       if (subChoice == 1) {
@@ -74,7 +79,7 @@ void showUserMenu() {
       }
 
       if (s) {
-        setPlayMode(0); // Default to Library mode
+        setPlayMode(0);
         playSong(s);
       } else {
         cout << "Lagu tidak ditemukan." << endl;
@@ -82,76 +87,74 @@ void showUserMenu() {
       pauseScreen();
       break;
     }
-    case 2: // Stop Lagu
+
+    case 2:
       stopSong();
       pauseScreen();
       break;
-    case 3: // Next Song
+    case 3:
       nextSong();
       pauseScreen();
       break;
-    case 4: // Prev Song
+    case 4:
       prevSong();
       pauseScreen();
       break;
-    case 5: { // Cari Lagu (ID or Title)
-      int subChoice;
-      cout << "\nCari Berdasarkan:" << endl;
-      cout << "1. ID" << endl;
-      cout << "2. Judul" << endl;
+    case 5: {
+      clearScreen();
+      cout << "=== PENCARIAN LAGU ===" << endl;
+      cout << "1. Berdasarkan Judul" << endl;
+      cout << "2. Berdasarkan Artis" << endl;
+      cout << "3. Berdasarkan Genre" << endl;
       cout << "Pilihan: ";
-      cin >> subChoice;
 
-      SongNode *s = nullptr;
-      if (subChoice == 1) {
-        int id;
-        cout << "Masukkan ID Lagu: ";
-        cin >> id;
-        s = getSongById(id);
-      } else if (subChoice == 2) {
-        string title;
-        cin.ignore();
-        cout << "Masukkan Judul Lagu: ";
-        getline(cin, title);
-        s = getSongByTitle(title);
-      }
+      int searchChoice;
+      cin >> searchChoice;
+      cin.ignore(); // Clear buffer after integer input
 
-      if (s) {
-        cout << "Ditemukan: " << s->data.title << " - " << s->data.artist
-             << " (" << s->data.year << ")" << endl;
-        cout << "Ingin memutar? (y/n): ";
-        char c;
-        cin >> c;
-        if (c == 'y' || c == 'Y') {
-          setPlayMode(0);
-          playSong(s);
-        }
-      } else {
-        cout << "Lagu tidak ditemukan." << endl;
-      }
-      pauseScreen();
-      break;
-    }
-    case 6:          // Lihat Library & Mainkan
-      clearScreen(); // New
-      showAllSongs();
-      cout << "\nMasukkan ID Lagu untuk mulai memutar (atau 0 untuk batal): ";
-      int id;
-      cin >> id;
-      if (id != 0) {
-        SongNode *s = getSongById(id);
+      if (searchChoice == 1) {
+        cout << "\nMasukkan Judul Lagu: ";
+        string searchTitle;
+        getline(cin, searchTitle);
+
+        SongNode *s = getSongByTitle(searchTitle);
         if (s) {
-          setPlayMode(0); // Genre Sequence Mode
-          playSong(s);
+          cout << "\nDitemukan: " << s->data.title << " - " << s->data.artist
+               << " (" << s->data.year << ")" << endl;
+          cout << "Ingin memutar lagu ini? (y/n): ";
+          char c;
+          cin >> c;
+          if (c == 'y' || c == 'Y') {
+            setPlayMode(0);
+            playSong(s);
+          }
         } else {
           cout << "Lagu tidak ditemukan." << endl;
         }
+
+      } else if (searchChoice == 2) {
+        cout << "\nMasukkan Nama Artis: ";
+        string artist;
+        getline(cin, artist);
+        showSongsByArtist(artist);
+
+      } else if (searchChoice == 3) {
+        cout << "\nMasukkan Genre: ";
+        string genre;
+        getline(cin, genre);
+        showSongsByGenre(genre);
+
+      } else {
+        cout << "Pilihan tidak valid." << endl;
       }
+
       pauseScreen();
       break;
-    case 7: {             // Mainkan dari Playlist
-      clearScreen();      // New
-      showAllPlaylists(); // 4. Show playlists first
+    }
+
+    case 6: {
+      clearScreen();
+      showAllPlaylists();
       string name;
       cin.ignore();
       cout << "\nMasukkan Nama Playlist: ";
@@ -159,7 +162,7 @@ void showUserMenu() {
       PlaylistNode *pl = getPlaylistByName(name);
       if (pl) {
         setCurrentPlaylist(name);
-        setPlayMode(1); // Playlist Mode
+        setPlayMode(1);
         if (pl->head) {
           playSong(pl->head->song);
         } else {
@@ -171,30 +174,29 @@ void showUserMenu() {
       pauseScreen();
       break;
     }
-    case 8:               // Lihat Playlist Saya
-      clearScreen();      // New
-      showAllPlaylists(); // 5. Already shows list/table
+    case 7:
+      clearScreen();
+      showAllPlaylists();
       pauseScreen();
       break;
-    case 9: // Kelola Playlist
+    case 8:
       showPlaylistMenu();
       break;
-    case 10:         // Riwayat Putar
-      clearScreen(); // New
+    case 9:
+      clearScreen();
       showHistory();
       pauseScreen();
       break;
-    case 11: // Logout
+    case 10:
       cout << "Logout..." << endl;
       break;
     default:
       cout << "Pilihan tidak valid." << endl;
       pauseScreen();
     }
-  } while (choice != 11);
+  } while (choice != 10);
 }
 
-// Re-implementing showPlaylistMenu (helper for option 9)
 void showPlaylistMenu() {
   int choice;
   do {

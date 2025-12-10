@@ -2,6 +2,7 @@
 #define PLAYLIST_MANAGER_H
 
 #include "../structs/DataStructures.h"
+#include <string>
 
 void initPlaylists();
 void createPlaylist(string name);

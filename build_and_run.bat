@@ -1,6 +1,6 @@
 @echo off
 echo Compiling Music Player...
-g++ Main.cpp admin/AdminMenu.cpp user/UserMenu.cpp library/LibraryManager.cpp playlist/PlaylistManager.cpp graph/GraphBuilder.cpp player/PlayerEngine.cpp utils/Utils.cpp -o MusicPlayer
+g++ Main.cpp admin/AdminMenu.cpp user/UserMenu.cpp library/LibraryManager.cpp playlist/PlaylistManager.cpp player/PlayerEngine.cpp utils/Utils.cpp utils/JsonHelper.cpp -o MusicPlayer
 
 if %errorlevel% neq 0 (
     echo Compilation Failed!

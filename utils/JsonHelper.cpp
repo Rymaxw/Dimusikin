@@ -1,4 +1,3 @@
-#include "JsonHelper.h"
 #include "../library/LibraryManager.h"
 #include "../playlist/PlaylistManager.h"
 #include <fstream>
@@ -86,7 +85,6 @@ void saveSongsToJson(string filename, SongNode *head) {
   }
   file << "]\n";
   file.close();
-  cout << "Data lagu berhasil disimpan ke " << filename << endl;
 }
 
 void loadSongsFromJson(string filename) {
@@ -159,7 +157,6 @@ void savePlaylistsToJson(string filename, PlaylistNode *head) {
   }
   file << "]\n";
   file.close();
-  cout << "Data playlist berhasil disimpan ke " << filename << endl;
 }
 
 void loadPlaylistsFromJson(string filename) {

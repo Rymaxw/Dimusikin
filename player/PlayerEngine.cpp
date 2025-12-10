@@ -1,22 +1,17 @@
 #include "PlayerEngine.h"
-#include "../graph/GraphBuilder.h"
 #include "../library/LibraryManager.h"
 #include "../playlist/PlaylistManager.h"
+#include "../utils/Utils.h"
 #include <iostream>
 
 using namespace std;
 
-// Player State
 SongNode *currentSong = nullptr;
-int playMode = 0; // 0: Library (Graph), 1: Playlist
+int playMode = 0;
 string currentPlaylistName = "";
-PlaylistItemNode *currentPlaylistNode =
-    nullptr; // To track position in playlist
+PlaylistItemNode *currentPlaylistNode = nullptr;
 
-// Queue (Next Up)
 Queue q;
-
-// Stack (History)
 Stack history;
 
 void initPlayer() {
@@ -26,7 +21,6 @@ void initPlayer() {
   currentSong = nullptr;
 }
 
-// Queue Operations
 void enqueue(SongNode *song) {
   QueueNode *newNode = new QueueNode;
   newNode->song = song;
@@ -52,7 +46,6 @@ SongNode *dequeue() {
   return song;
 }
 
-// Stack Operations
 void pushHistory(SongNode *song) {
   StackNode *newNode = new StackNode;
   newNode->song = song;
@@ -70,18 +63,13 @@ SongNode *popHistory() {
   return song;
 }
 
-// Player Logic
-void setPlayMode(int mode) {
-  playMode = mode;
-  cout << "Mode Player diubah ke: "
-       << (mode == 0 ? "Library/Graph" : "Playlist") << endl;
-}
+void setPlayMode(int mode) { playMode = mode; }
 
 void setCurrentPlaylist(string playlistName) {
   currentPlaylistName = playlistName;
   PlaylistNode *pl = getPlaylistByName(playlistName);
   if (pl) {
-    currentPlaylistNode = pl->head; // Reset to start
+    currentPlaylistNode = pl->head;
     cout << "Playlist aktif: " << playlistName << endl;
   } else {
     cout << "Playlist tidak ditemukan." << endl;
@@ -96,8 +84,6 @@ void playSong(SongNode *song) {
     pushHistory(currentSong);
   }
   currentSong = song;
-  cout << ">>> SEDANG MEMUTAR: " << currentSong->data.title << " - "
-       << currentSong->data.artist << " <<<" << endl;
 }
 
 void stopSong() {
@@ -143,22 +129,21 @@ void showHistory() {
 SongNode *getCurrentSong() { return currentSong; }
 
 void nextSong() {
-  // 1. Check Queue
   SongNode *next = dequeue();
+
   if (next != nullptr) {
     playSong(next);
     return;
   }
 
-  // 2. Logic based on Mode
-  if (playMode == 0) { // Library Mode -> Genre Sequence
+  if (playMode == 0) {
     if (currentSong == nullptr) {
       cout << "Tidak ada lagu yang sedang diputar." << endl;
       return;
     }
 
-    // Genre Sequence Logic: Find next song with SAME genre
     string currentGenre = currentSong->data.genre;
+
     SongNode *curr = currentSong->next;
     bool found = false;
 
@@ -175,7 +160,7 @@ void nextSong() {
     if (!found) {
       cout << "Akhir dari genre '" << currentGenre << "'." << endl;
     }
-  } else { // Playlist Mode
+  } else {
     if (currentPlaylistNode != nullptr &&
         currentPlaylistNode->next != nullptr) {
       currentPlaylistNode = currentPlaylistNode->next;
@@ -189,8 +174,6 @@ void nextSong() {
 void prevSong() {
   SongNode *prev = popHistory();
   if (prev != nullptr) {
-    // Don't push current to history when going back, or do?
-    // Usually "Back" just goes back.
     currentSong = prev;
     cout << ">>> MUNDUR KE: " << currentSong->data.title << " <<<" << endl;
   } else {

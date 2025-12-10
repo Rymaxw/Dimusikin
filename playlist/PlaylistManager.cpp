@@ -1,5 +1,5 @@
 #include "PlaylistManager.h"
-#include <iomanip> // For table view
+#include <iomanip>
 #include <iostream>
 
 using namespace std;
@@ -32,7 +32,7 @@ void renamePlaylist(string oldName, string newName) {
     cout << "Playlist '" << oldName << "' tidak ditemukan." << endl;
     return;
   }
-  // Check if new name exists
+
   if (getPlaylistByName(newName) != nullptr) {
     cout << "Nama playlist '" << newName << "' sudah digunakan." << endl;
     return;
@@ -53,7 +53,7 @@ void deletePlaylist(string name) {
       } else {
         prev->next = curr->next;
       }
-      // Delete all child nodes (items)
+
       PlaylistItemNode *item = curr->head;
       while (item != nullptr) {
         PlaylistItemNode *temp = item;
@@ -83,7 +83,7 @@ void addSongToPlaylist(string playlistName, SongNode *song) {
   }
 
   PlaylistItemNode *newItem = new PlaylistItemNode;
-  newItem->song = song; // POINTER ASSIGNMENT (No data duplication)
+  newItem->song = song;
   newItem->next = nullptr;
 
   if (pl->head == nullptr) {
@@ -131,8 +131,8 @@ void showPlaylistDetails(string playlistName) {
     return;
   }
 
-  // Table Header
   cout << left << setw(5) << "No" << left << setw(35) << "Judul" << left
+
        << setw(25) << "Artis" << left << setw(15) << "Genre" << left << setw(6)
        << "Tahun" << left << setw(10) << "Durasi" << endl;
   cout << string(96, '-') << endl;
@@ -140,8 +140,9 @@ void showPlaylistDetails(string playlistName) {
   PlaylistItemNode *curr = pl->head;
   int i = 1;
   while (curr != nullptr) {
-    // Accessing data via POINTER to Library Node
+
     cout << left << setw(5) << i << left << setw(35) << curr->song->data.title
+
          << left << setw(25) << curr->song->data.artist << left << setw(15)
          << curr->song->data.genre << left << setw(6) << curr->song->data.year
          << left << setw(10) << curr->song->data.duration << endl;
